@@ -1,0 +1,22 @@
+.span_name {
+  width: 60%;
+}
+
+.span_number {
+  flex-grow: 2;
+}
+
+.button {
+  height: 30px;
+  width: 30px;
+  color: white;
+  font-weight: 900;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(241, 57, 45);
+}
+
+
+.button:hover {
+    background-color: rgb(177, 55, 47);
+}
