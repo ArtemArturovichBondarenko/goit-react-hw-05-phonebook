@@ -7,6 +7,8 @@ import Filter from './Filter/Filter';
 import { v4 as uuidv4 } from 'uuid';
 import slideTransition from '../transitions/slide_500ms.module.css';
 import popTransition from '../transitions/pop.module.css';
+import slideRightTransition from '../transitions/slide_right_250ms.module.css';
+
 import style from './App.module.css';
 
 const filterContacts = (contacts, filter) => {
@@ -59,7 +61,7 @@ export default class App extends Component {
     if (this.state.notification) {
       setTimeout(() => {
         this.setState(state => ({ notification: !state.notification }));
-      }, 2000);
+      }, 1000);
     }
   };
 
@@ -99,16 +101,15 @@ export default class App extends Component {
     const filteredContacts = filterContacts(contacts, filter);
     return (
       <div className={style.container}>
-        {notification && (
-          <CSSTransition
-            in={notification}
-            timeout={250}
-            unmountOnExit
-            classNames={slideTransition}
-          >
-            <Notification onClick={this.changenotification} />
-          </CSSTransition>
-        )}
+        <CSSTransition
+          in={notification}
+          timeout={250}
+          unmountOnExit
+          classNames={slideRightTransition}
+        >
+          <Notification onClick={this.changenotification} />
+        </CSSTransition>
+
         <CSSTransition
           in={isLoading}
           timeout={500}
@@ -117,19 +118,27 @@ export default class App extends Component {
         >
           <h1 className={style.h1}>Phonebook</h1>
         </CSSTransition>
+{/* //==================================== */}
+        {/* <CSSTransition
+          in={true}
+          appear={true}
+          timeout={500}
+          classNames={style.h1_slideIn}
+          unmountOnExit
+        >
+          <h1 className={style.h1}>Phonebook</h1>;
+        </CSSTransition> */}
+{/* //======================================= */}
         <ContactForm onAddContact={this.addContact} />
 
-        {contacts.length >= 2 && (
-          <CSSTransition
-            in={contacts.length >= 2}
-            timeout={250}
-            // mountOnEnter
-            unmountOnExit
-            classNames={popTransition}
-          >
-            <Filter value={filter} onChangeFilter={this.changeFilter} />
-          </CSSTransition>
-        )}
+        <CSSTransition
+          in={contacts.length >= 2}
+          timeout={250}
+          unmountOnExit
+          classNames={popTransition}
+        >
+          <Filter value={filter} onChangeFilter={this.changeFilter} />
+        </CSSTransition>
         <ContactList
           items={filteredContacts}
           onDeleteContact={this.deleteContact}
