@@ -15,13 +15,13 @@
   color: rgb(54, 69, 171);
 }
 
-.h1_slideIn-appear {
-  /* opacity: 0; */
+.fade-appear {
+  opacity: 0;
   transform: translateX(-100%);
 }
 
-.h1_slideIn-appear-active {
-  /* opacity: 1; */
+.fade-appear-active {
+  opacity: 1;
   transform: translateX(0);
   transition: transform 500ms ease-in-out;
 }

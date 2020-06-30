@@ -5,6 +5,7 @@ import Notification from './Notification/Notification';
 import { CSSTransition } from 'react-transition-group';
 import Filter from './Filter/Filter';
 import { v4 as uuidv4 } from 'uuid';
+// import './App.css';
 import slideTransition from '../transitions/slide_500ms.module.css';
 import popTransition from '../transitions/pop.module.css';
 import slideRightTransition from '../transitions/slide_right_250ms.module.css';
@@ -118,17 +119,17 @@ export default class App extends Component {
         >
           <h1 className={style.h1}>Phonebook</h1>
         </CSSTransition>
-{/* //==================================== */}
+        {/* //==================================== */}
         {/* <CSSTransition
           in={true}
           appear={true}
           timeout={500}
-          classNames={style.h1_slideIn}
+          classNames="fade"
           unmountOnExit
         >
-          <h1 className={style.h1}>Phonebook</h1>;
+          <h1 className={style.h1}>Phonebook</h1>
         </CSSTransition> */}
-{/* //======================================= */}
+        {/* //======================================= */}
         <ContactForm onAddContact={this.addContact} />
 
         <CSSTransition
