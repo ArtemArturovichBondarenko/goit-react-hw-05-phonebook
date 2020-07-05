@@ -2,9 +2,13 @@ import React, { Component } from 'react';
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
 import Notification from './Notification/Notification';
+import ThemeSwitchButton from './ThemeSwitchButton/ThemeSwitchButton';
+import Wrapped from './Wrapper/Wrapper';
 import { CSSTransition } from 'react-transition-group';
 import Filter from './Filter/Filter';
 import { v4 as uuidv4 } from 'uuid';
+import ThemeContext from '../contexts/ThemeContext';
+import method from './methods/LocalStorage';
 // import './App.css';
 import slideTransition from '../transitions/slide_500ms.module.css';
 import popTransition from '../transitions/pop.module.css';
@@ -31,22 +35,31 @@ export default class App extends Component {
     notification: false,
   };
   componentDidMount() {
-    const persistContacts = localStorage.getItem('contacts');
     this.togleLoading();
 
-    if (persistContacts) {
-      try {
-        const contacts = JSON.parse(persistContacts);
-        this.setState({ contacts });
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    const key = 'contacts';
+    this.setState({ contacts: method.get(key) });
+    // const persistContacts = localStorage.getItem('contacts');
+
+    // if (persistContacts) {
+    //   try {
+    //     const contacts = JSON.parse(persistContacts);
+    //     this.setState({ contacts });
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    // if (prevState.contacts !== this.state.contacts) {
+    //   localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    // }
+    const key = 'contacts';
+    const value = this.state.contacts;
+
+    if (prevState.contacts !== value) {
+      method.save(key, value);
     }
   }
 
@@ -96,31 +109,31 @@ export default class App extends Component {
   render() {
     const { contacts, filter, isLoading, notification } = this.state;
 
-    // console.log(contacts.length >= 2);
-    console.log(notification);
-
     const filteredContacts = filterContacts(contacts, filter);
     return (
-      <div className={style.container}>
-        <CSSTransition
-          in={notification}
-          timeout={250}
-          unmountOnExit
-          classNames={slideRightTransition}
-        >
-          <Notification onClick={this.changenotification} />
-        </CSSTransition>
+      <ThemeContext>
+        <Wrapped>
+          <div className={style.container}>
+          <CSSTransition
+            in={notification}
+            timeout={250}
+            unmountOnExit
+            classNames={slideRightTransition}
+          >
+            <Notification onClick={this.changenotification} />
+          </CSSTransition>
 
-        <CSSTransition
-          in={isLoading}
-          timeout={500}
-          unmountOnExit
-          classNames={slideTransition}
-        >
-          <h1 className={style.h1}>Phonebook</h1>
-        </CSSTransition>
-        {/* //==================================== */}
-        {/* <CSSTransition
+          <CSSTransition
+            in={isLoading}
+            timeout={500}
+            unmountOnExit
+            classNames={slideTransition}
+          >
+            <h1 className={style.h1}>Phonebook</h1>
+          </CSSTransition>
+          <ThemeSwitchButton />
+          {/* //==================================== */}
+          {/* <CSSTransition
           in={true}
           appear={true}
           timeout={500}
@@ -129,22 +142,24 @@ export default class App extends Component {
         >
           <h1 className={style.h1}>Phonebook</h1>
         </CSSTransition> */}
-        {/* //======================================= */}
-        <ContactForm onAddContact={this.addContact} />
+          {/* //======================================= */}
+          <ContactForm onAddContact={this.addContact} />
 
-        <CSSTransition
-          in={contacts.length >= 2}
-          timeout={250}
-          unmountOnExit
-          classNames={popTransition}
-        >
-          <Filter value={filter} onChangeFilter={this.changeFilter} />
-        </CSSTransition>
-        <ContactList
-          items={filteredContacts}
-          onDeleteContact={this.deleteContact}
-        />
-      </div>
+          <CSSTransition
+            in={contacts.length >= 2}
+            timeout={250}
+            unmountOnExit
+            classNames={popTransition}
+          >
+            <Filter value={filter} onChangeFilter={this.changeFilter} />
+          </CSSTransition>
+          <ContactList
+            items={filteredContacts}
+            onDeleteContact={this.deleteContact}
+          />
+          </div>
+        </Wrapped>
+      </ThemeContext>
     );
   }
 }
